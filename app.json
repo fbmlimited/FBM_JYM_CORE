@@ -1,0 +1,40 @@
+{
+  "id": "3c5c97e5-3674-41f4-b04f-fc563d2a7fd4",
+  "name": "FBM_JYM_CORE",
+  "publisher": "FBM Group",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "id": "9d836a4f-3b97-4179-ae7d-608f099ba7f3",
+      "name": "FBM Data Dictionary",
+      "publisher": "FBM Group",
+      "version": "1.0.0.1"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "22.0.0.0",
+  "idRanges": [
+    {
+      "from": 60100,
+      "to": 60299
+    }
+   
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "11.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
