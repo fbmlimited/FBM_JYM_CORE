@@ -1,4 +1,4 @@
-page 60148 FBM_CustLookup_JYM_CO
+page 60248 FBM_CustLookup_JYM_CO
 {
     Caption = 'Customer Lookup';
     PageType = List;

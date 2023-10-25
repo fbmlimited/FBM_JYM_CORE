@@ -1,4 +1,4 @@
-page 60147 "FBM_Aged Acc by Months_JYM_CO"
+page 60247 "FBM_Aged Acc by Months_JYM_CO"
 {
     // version ONETECH
 

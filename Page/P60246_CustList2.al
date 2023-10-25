@@ -1,4 +1,4 @@
-page 60146 "FBM_Customer List_JYM_CO"
+page 60246 "FBM_Customer List_JYM_CO"
 {
     ApplicationArea = Basic, Suite, Service;
     Caption = 'Customers';
@@ -1875,7 +1875,7 @@ page 60146 "FBM_Customer List_JYM_CO"
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
         PowerBIServiceMgt: Codeunit "Power BI Service Mgt.";
         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
-        [InDataSet]
+
         CanSendEmail: Boolean;
         ExtendedPriceEnabled: Boolean;
         CRMIntegrationEnabled: Boolean;
