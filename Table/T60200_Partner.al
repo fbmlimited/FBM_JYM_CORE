@@ -12,7 +12,7 @@ table 60200 FBM_Partner_JYM_CO
         }
         field(2; Name; text[100])
         {
-            Caption = 'Nome partner';
+            Caption = 'Nombre partner';
 
         }
 

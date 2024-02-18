@@ -17,7 +17,7 @@ pageextension 60247 FBMCustomerListExt_JYMCO extends "Customer List"
         }
         addafter("Phone No.")
         {
-            field("Payment Bank Code"; rec."FBM_Payment Bank Code")
+            field("Payment Bank Code_CO"; rec."FBM_Payment Bank Code")
             {
                 ApplicationArea = all;
             }
@@ -28,7 +28,7 @@ pageextension 60247 FBMCustomerListExt_JYMCO extends "Customer List"
         }
         addafter("Name")
         {
-            field("No. 2"; rec.FBM_GrCode)
+            field("No. 2_CO"; rec.FBM_GrCode)
             {
                 ApplicationArea = all;
             }
@@ -36,11 +36,11 @@ pageextension 60247 FBMCustomerListExt_JYMCO extends "Customer List"
             {
                 ApplicationArea = all;
             }
-            field("Group Customer"; rec.FBM_Group)
+            field("Group Customer_CO"; rec.FBM_Group)
             {
                 ApplicationArea = all;
             }
-            field("SubGroup Customer"; rec.FBM_SubGroup)
+            field("SubGroup Customer_CO"; rec.FBM_SubGroup)
             {
                 ApplicationArea = all;
             }

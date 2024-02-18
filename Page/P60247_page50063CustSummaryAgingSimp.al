@@ -16,6 +16,7 @@ page 60247 "FBM_Aged Acc by Months_JYM_CO"
             field(StartDate; StartDate)
             {
                 Caption = 'Balance as at';
+                ApplicationArea = all;
 
 
                 trigger OnValidate()
@@ -27,6 +28,7 @@ page 60247 "FBM_Aged Acc by Months_JYM_CO"
             field(FilterTotalDue; FilterTotalDue)
             {
                 Caption = 'Exclude Zero Total Due Balances';
+                ApplicationArea = all;
 
                 trigger OnValidate()
                 begin
@@ -37,6 +39,7 @@ page 60247 "FBM_Aged Acc by Months_JYM_CO"
             field("Global Dimension 1 Filter"; GlobalDimension1Filter)
             {
                 TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1));
+                ApplicationArea = all;
 
                 trigger OnValidate()
                 begin
@@ -46,6 +49,7 @@ page 60247 "FBM_Aged Acc by Months_JYM_CO"
             field("Global Dimension 2 Filter"; GlobalDimension2Filter)
             {
                 TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2));
+                ApplicationArea = all;
 
                 trigger OnValidate()
                 begin
@@ -57,72 +61,89 @@ page 60247 "FBM_Aged Acc by Months_JYM_CO"
                 Editable = false;
                 field("No."; rec."No.")
                 {
+                    ApplicationArea = all;
                 }
                 field(Name; rec.Name)
                 {
+                    ApplicationArea = all;
                 }
 
                 field("Gen. Bus. Posting Group"; rec."Gen. Bus. Posting Group")
-                { }
+                { ApplicationArea = all; }
                 field("Current Month"; rec."FBM_Current Month_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("1 Month"; rec."FBM_1 Month_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("2 Months"; rec."FBM_2 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("3 Months"; rec."FBM_3 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("4 Months"; rec."FBM_4 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("5 Months"; rec."FBM_5 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("6 Months"; rec."FBM_6 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("7 Months"; rec."FBM_7 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("8 Months"; rec."FBM_8 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("9 Months"; rec."FBM_9 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("10 Months"; rec."FBM_10 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("11 Months"; rec."FBM_11 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("12 Months"; rec."FBM_12 Months_FF")
                 {
                     BlankZero = true;
+                    ApplicationArea = all;
                 }
                 field("Amounts Not Due"; rec."FBM_Amounts Not Due_FF")
                 {
                     Caption = 'Amounts Not Due';
+                    ApplicationArea = all;
                 }
                 field("Total Balance"; rec."FBM_Current Month_FF" + rec."FBM_1 Month_FF" + rec."FBM_2 Months_FF" + rec."FBM_3 Months_FF" + rec."FBM_4 Months_FF" + rec."FBM_5 Months_FF" + rec."FBM_6 Months_FF" + rec."FBM_7 Months_FF" + rec."FBM_8 Months_FF" + rec."FBM_9 Months_FF" + rec."FBM_10 Months_FF" + rec."FBM_11 Months_FF" + rec."FBM_12 Months_FF")
                 {
                     Caption = 'Total Balance';
+                    ApplicationArea = all;
                 }
             }
         }
