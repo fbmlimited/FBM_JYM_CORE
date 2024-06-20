@@ -1,4 +1,4 @@
-pageextension 60202 FBM_ItemTraxkingLinesExt_JYMCO extends "Item Tracking Lines"
+pageextension 60202 FBM_ItemTrackingLinesExt_JYMCO extends "Item Tracking Lines"
 {
     layout
     {

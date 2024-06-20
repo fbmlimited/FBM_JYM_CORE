@@ -1,18 +1,10 @@
-tableextension 60200 FBM_CustomerExt_JCM_CO extends Customer
+tableextension 60201 FBM_CustomerSiteExt_JCM_CO extends FBM_CustomerSite_C
 {
     fields
     {
         field(60200; FBM_CustomerType; enum FBM_CustType_JYM_CO)
         {
             Caption = 'Tipo Cliente';
-            trigger
-            OnValidate()
-            var
-                csite: record FBM_CustomerSite_C;
-            begin
-                csite.SetRange("Customer No.", rec."No.");
-                csite.ModifyAll(FBM_CustomerType, rec.FBM_CustomerType);
-            end;
 
         }
         field(60201; FBM_Permisionario; text[100])
@@ -30,7 +22,7 @@ tableextension 60200 FBM_CustomerExt_JCM_CO extends Customer
         field(60203; FBM_Administrador; text[100])
         {
             Caption = 'Administrador';
-            TableRelation = Customer.Name where(FBM_CustomerType = const(FBM_CustType_JYM_CO::Administrador));
+            TableRelation = FBM_Partner_JYM_CO.Name where(Type = const(FBM_CustType_JYM_CO::Administrador));
             ValidateTableRelation = false;
         }
         field(60204; FBM_PermisionarioC; code[20])
@@ -49,5 +41,14 @@ tableextension 60200 FBM_CustomerExt_JCM_CO extends Customer
 
         }
     }
+    trigger
+    OnInsert()
+    var
+        cust: record Customer;
+    begin
+        cust.get(rec."Customer No.");
+        rec.FBM_CustomerType := cust.FBM_CustomerType;
+        //rec.Modify();
+    end;
 
 }

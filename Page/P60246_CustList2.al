@@ -392,16 +392,7 @@ page 60246 "FBM_Customer List_JYM_CO"
                               "Global Dimension 2 Filter" = FIELD("Global Dimension 2 Filter");
                 Visible = false;
             }
-#if not CLEAN21
-            part("Power BI Report FactBox"; "Power BI Report FactBox")
-            {
-                ApplicationArea = Basic, Suite;
-                Visible = false;
-                ObsoleteReason = 'Use the part PowerBIEmbeddedReportPart instead';
-                ObsoleteState = Pending;
-                ObsoleteTag = '21.0';
-            }
-#endif
+
             systempart(Control1900383207; Links)
             {
                 ApplicationArea = RecordLinks;
@@ -821,40 +812,7 @@ page 60246 "FBM_Customer List_JYM_CO"
                     RunPageLink = Code = FIELD("Invoice Disc. Code");
                     ToolTip = 'Set up different discounts that are applied to invoices for the customer. An invoice discount is automatically granted to the customer when the total on a sales invoice exceeds a certain amount.';
                 }
-#if not CLEAN21
-                action(Sales_Prices)
-                {
-                    ApplicationArea = Advanced;
-                    Caption = 'Prices';
-                    Image = Price;
-                    ToolTip = 'View or set up different prices for items that you sell to the customer. An item price is automatically granted on invoice lines when the specified criteria are met, such as customer, quantity, or ending date.';
-                    Visible = not ExtendedPriceEnabled;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '18.0';
 
-                    trigger OnAction()
-                    begin
-                        ShowPrices();
-                    end;
-                }
-                action(Sales_LineDiscounts)
-                {
-                    ApplicationArea = Advanced;
-                    Caption = 'Line Discounts';
-                    Image = LineDiscount;
-                    ToolTip = 'View or set up different discounts for items that you sell to the customer. An item discount is automatically granted on invoice lines when the specified criteria are met, such as customer, quantity, or ending date.';
-                    Visible = not ExtendedPriceEnabled;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '18.0';
-
-                    trigger OnAction()
-                    begin
-                        ShowLineDiscounts();
-                    end;
-                }
-#endif
                 action("Prepa&yment Percentages")
                 {
                     ApplicationArea = Prepayments;
@@ -1186,61 +1144,7 @@ page 60246 "FBM_Customer List_JYM_CO"
                         PriceUXManagement.ShowPriceListLines(PriceSource, "Price Amount Type"::Discount);
                     end;
                 }
-#if not CLEAN21
-                action(PriceListsDiscounts)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Price Lists (Discounts)';
-                    Image = LineDiscount;
-                    Visible = false;
-                    ToolTip = 'View or set up different discounts for products that you sell to the customer. A product line discount is automatically granted on invoice lines when the specified criteria are met, such as customer, quantity, or ending date.';
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Action PriceLists shows all sales price lists with prices and discounts';
-                    ObsoleteTag = '18.0';
 
-                    trigger OnAction()
-                    var
-                        PriceUXManagement: Codeunit "Price UX Management";
-                        AmountType: Enum "Price Amount Type";
-                    begin
-                        PriceUXManagement.ShowPriceLists(Rec, AmountType::Discount);
-                    end;
-                }
-                action(Prices_Prices)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Prices';
-                    Image = Price;
-                    Scope = Repeater;
-                    Visible = not ExtendedPriceEnabled;
-                    ToolTip = 'View or set up different prices for items that you sell to the selected customer. An item price is automatically granted on invoice lines when the specified criteria are met, such as customer, quantity, or ending date.';
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '17.0';
-
-                    trigger OnAction()
-                    begin
-                        ShowPrices();
-                    end;
-                }
-                action(Prices_LineDiscounts)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Line Discounts';
-                    Image = LineDiscount;
-                    Scope = Repeater;
-                    Visible = not ExtendedPriceEnabled;
-                    ToolTip = 'View or set up different discounts for items that you sell to the customer. An item discount is automatically granted on invoice lines when the specified criteria are met, such as customer, quantity, or ending date.';
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '17.0';
-
-                    trigger OnAction()
-                    begin
-                        ShowLineDiscounts();
-                    end;
-                }
-#endif
             }
             group("Request Approval")
             {
@@ -1390,32 +1294,7 @@ page 60246 "FBM_Customer List_JYM_CO"
                 RunPageLink = "Source No." = FIELD("No.");
                 ToolTip = 'Process your customer payments by matching amounts received on your bank account with the related unpaid sales invoices, and then post the payments.';
             }
-#if not CLEAN21
-            group(Display)
-            {
-                Caption = 'Display';
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Use the Personalization mode to hide and show this factbox.';
-                ObsoleteTag = '21.0';
-                action(ReportFactBoxVisibility)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Show/Hide Power BI Reports';
-                    Image = "Report";
-                    ToolTip = 'Select if the Power BI FactBox is visible or not.';
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Use the Personalization mode to hide and show this factbox.';
-                    ObsoleteTag = '21.0';
 
-                    trigger OnAction()
-                    begin
-                        CurrPage."Power BI Report FactBox".PAGE.SetFactBoxVisibility(PowerBIVisible);
-                    end;
-                }
-            }
-#endif
         }
         area(reporting)
         {
@@ -1697,45 +1576,14 @@ page 60246 "FBM_Customer List_JYM_CO"
                 actionref("Return Orders_Promoted"; "Return Orders")
                 {
                 }
-#if not CLEAN21
-                actionref("Cash Receipt Journal_Promoted"; "Cash Receipt Journal")
-                {
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Action is being demoted based on overall low usage.';
-                    ObsoleteTag = '21.0';
-                }
-#endif
-#if not CLEAN21
-                actionref("Sales Journal_Promoted"; "Sales Journal")
-                {
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Action is being demoted based on overall low usage.';
-                    ObsoleteTag = '21.0';
-                }
-#endif
+
+
             }
             group(Category_Category9)
             {
                 Caption = 'Prices & Discounts', Comment = 'Generated from the PromotedActionCategories property index 8.';
 
-#if not CLEAN21
-                actionref(Prices_Prices_Promoted; Prices_Prices)
-                {
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '17.0';
-                }
-#endif
-#if not CLEAN21
-                actionref(Prices_LineDiscounts_Promoted; Prices_LineDiscounts)
-                {
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Replaced by the new implementation (V16) of price calculation.';
-                    ObsoleteTag = '17.0';
-                }
-#endif
+
                 actionref(PriceLists_Promoted; PriceLists)
                 {
                 }
@@ -1824,10 +1672,7 @@ page 60246 "FBM_Customer List_JYM_CO"
 
         WorkflowWebhookManagement.GetCanRequestAndCanCancel(rec.RecordId, CanRequestApprovalForFlow, CanCancelApprovalForFlow);
 
-#if not CLEAN21
-        // Contextual Power BI FactBox: send data to filter the report in the FactBox
-        CurrPage."Power BI Report FactBox".PAGE.SetCurrentListSelection(rec."No.", false, PowerBIVisible);
-#endif
+
         CurrPage.PowerBIEmbeddedReportPart.PAGE.SetCurrentListSelection(rec."No.");
 
         CurrPage.SetSelectionFilter(Customer);
@@ -1840,10 +1685,7 @@ page 60246 "FBM_Customer List_JYM_CO"
         //SetCaption(CaptionTxt);
         CurrPage.Caption(CaptionTxt);
 
-#if not CLEAN21
-        PowerBIVisible := false;
-        CurrPage."Power BI Report FactBox".PAGE.InitFactBox(CurrPage.ObjectId(false), CurrPage.Caption, PowerBIVisible);
-#endif
+
         CurrPage.PowerBIEmbeddedReportPart.PAGE.InitPageRatio(PowerBIServiceMgt.GetFactboxRatio());
         CurrPage.PowerBIEmbeddedReportPart.PAGE.SetPageContext(CurrPage.ObjectId(false));
 

@@ -11,11 +11,7 @@ pageextension 60200 FBM_CustCardExt_JYM_CO extends "Customer Card"
                 field(FBM_CustomerType; Rec.FBM_CustomerType)
                 {
                     ApplicationArea = all;
-                    trigger
-                    OnValidate()
-                    begin
-                        ufield();
-                    end;
+
 
 
 
@@ -24,83 +20,70 @@ pageextension 60200 FBM_CustCardExt_JYM_CO extends "Customer Card"
                 }
 
 
-                field(FBM_Permisionario; Rec.FBM_Permisionario)
 
-                {
-                    enabled = showP;
-                    ApplicationArea = all;
-
-                }
-                field(FBM_Operador; Rec.FBM_Operador)
-                {
-                    enabled = showO;
-                    ApplicationArea = all;
-
-                }
-                field(FBM_Administrador; Rec.FBM_Administrador)
-                {
-                    ApplicationArea = all;
-                    Enabled = showA;
-                }
 
             }
         }
     }
-    trigger
-    OnOpenPage()
-    begin
-        ufield();
+    actions
+    {
+        addlast(navigation)
+        {
+            group("Customer Sites_CO")
+            {
+                Image = Warehouse;
+                caption = 'Sites';
 
-    end;
+
+                action(Sites)
+                {
+                    ApplicationArea = All;
+                    Image = Warehouse;
+                    Visible = ShowSites;
+                    caption = 'Local Sites';
+
+                    trigger OnAction()
+                    begin
+                        Clear(CustomerSite);
+                        Clear(CustomerSiteP);
+                        CustomerSite.SetFilter("Customer No.", Rec."No.");
+                        CustomerSiteP.SetTableView(CustomerSite);
+                        CustomerSiteP.RunModal();
+                    end;
+                }
+            }
+        }
+
+    }
+
+
 
     var
-        showP: Boolean;
-        showO: Boolean;
-        showA: Boolean;
 
-    procedure ufield()
+
+
+
+        CustomerSiteP: Page FBM_CustomerSite_JMCO;
+        CustomerSite: Record FBM_CustomerSite_C;
+
+
+        companyinfo: Record "Company Information";
+        ShowSites: boolean;
+        issup: boolean;
+        hascode: Boolean;
+
+    trigger OnOpenPage()
+    var
+        uper: Codeunit "User Permissions";
     begin
-        Case rec.FBM_CustomerType of
-            rec.FBM_CustomerType::Permisionario:
-                begin
-                    showP := true;
-                    showO := false;
-                    showA := false;
-                    rec.FBM_Administrador := '';
-                    rec.FBM_Operador := '';
-                    rec.FBM_AdministradorC := '';
-                    rec.FBM_OperadorC := '';
-                    rec.FBM_Permisionario := rec.Name;
-                    rec.FBM_PermisionarioC := rec."No.";
+        if companyinfo.Get() then begin
+            if companyinfo.FBM_CustIsOp then
+                ShowSites := true
+            else
+                ShowSites := false;
 
-                end;
-            rec.FBM_CustomerType::Operador:
-                begin
-                    showP := true;
-                    showO := true;
-                    showA := false;
-                    rec.FBM_Administrador := '';
-                    rec.FBM_AdministradorC := '';
-                    rec.FBM_Operador := rec.Name;
-                    rec.FBM_OperadorC := rec."No.";
-                    rec.FBM_Permisionario := '';
-                    rec.FBM_PermisionarioC := '';
+        end;
+        issup := uper.IsSuper(UserSecurityId())
 
-                end;
-            rec.FBM_CustomerType::Administrador:
-                begin
-                    showP := true;
-                    showO := true;
-                    showA := true;
-                    rec.FBM_Administrador := rec.Name;
-                    rec.FBM_AdministradorC := rec."No.";
-                    rec.FBM_Operador := '';
-                    rec.FBM_Permisionario := '';
-                    rec.FBM_OperadorC := '';
-                    rec.FBM_PermisionarioC := '';
-                end;
-
-
-        End;
     end;
 }
