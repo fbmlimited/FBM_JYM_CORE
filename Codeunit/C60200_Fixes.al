@@ -90,4 +90,21 @@ codeunit 60200 FBM_Fixes_JMCO
         end;
 
     end;
+
+    procedure refrcust()
+    var
+        cust: record FBM_Customer;
+    begin
+        cust.FindFirst();
+        repeat
+            cust.Validate(name, cust.Name + ';');
+            cust.Modify();
+            commit;
+            cust.Validate(name, copystr(cust.name, 1, strlen(cust.name) - 1));
+            cust.Modify(true);
+            commit;
+        until cust.Next() = 0;
+        message('done');
+
+    end;
 }

@@ -47,6 +47,21 @@ pageextension 60203 FBM_GLSetupExt_JMCO extends "General Ledger Setup"
                 end;
 
             }
+            action("RefrCust")
+            {
+                ApplicationArea = all;
+                trigger
+                OnAction()
+                var
+                    fix: Codeunit FBM_Fixes_JMCO;
+                begin
+                    fix.refrcust();
+
+
+                end;
+
+            }
+
         }
     }
 }
