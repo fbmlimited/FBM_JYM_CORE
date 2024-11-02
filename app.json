@@ -2,20 +2,20 @@
   "id": "3c5c97e5-3674-41f4-b04f-fc563d2a7fd4",
   "name": "FBM_JYM_CORE",
   "publisher": "FBM Group",
-  "version": "124.2.151.0",
+  "version": "124.5.156.180",
   "brief": "",
   "description": "",
   "privacyStatement": "",
   "EULA": "",
   "help": "",
   "url": "",
-  "logo": "",
+  "logo": "./fbm.png",
   "dependencies": [
     {
       "id": "9d836a4f-3b97-4179-ae7d-608f099ba7f3",
       "name": "FBM Data Dictionary",
       "publisher": "FBM Group",
-      "version": "124.1.151.0"
+      "version": "124.5.156.8"
     },
     {
       "id": "eeab5194-c9bc-4efc-bc6c-bf12792d6a5f",
@@ -26,11 +26,11 @@
   ],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "24.0.0.0",
+  "application": "24.4.0.0",
   "idRanges": [
     {
       "from": 60100,
-      "to": 60299
+      "to": 60399
     }
    
   ],

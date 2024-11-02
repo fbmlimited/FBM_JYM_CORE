@@ -1,4 +1,4 @@
-pageextension 60200 FBM_CustCardExt_JYM_CO extends "Customer Card"
+pageextension 60300 FBM_CustCardExt_JYM_CO extends "Customer Card"
 {
     layout
     {
@@ -35,22 +35,24 @@ pageextension 60200 FBM_CustCardExt_JYM_CO extends "Customer Card"
                 caption = 'Sites';
 
 
-                action(Sites)
-                {
-                    ApplicationArea = All;
-                    Image = Warehouse;
-                    Visible = ShowSites;
-                    caption = 'Local Sites';
+                // action(Sites)
+                // {
+                //     ApplicationArea = All;
+                //     Image = Warehouse;
+                //     Visible = ShowSites;
+                //     caption = 'Local Sites';
 
-                    trigger OnAction()
-                    begin
-                        Clear(CustomerSite);
-                        Clear(CustomerSiteP);
-                        CustomerSite.SetFilter("Customer No.", Rec."No.");
-                        CustomerSiteP.SetTableView(CustomerSite);
-                        CustomerSiteP.RunModal();
-                    end;
-                }
+                //     trigger OnAction()
+                //     begin
+                //         Clear(CustomerSite);
+                //         Clear(CustomerSiteP);
+                //         CustomerSite.SetFilter("Customer No.", Rec."No.");
+                //         CustomerSite.SetRange(ActiveRec, true);
+                //         CustomerSiteP.SetTableView(CustomerSite);
+                //         Commit();
+                //         CustomerSiteP.RunModal();
+                //     end;
+                // }
             }
         }
 

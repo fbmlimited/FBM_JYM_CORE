@@ -1,6 +1,6 @@
 codeunit 60200 FBM_Fixes_JMCO
 {
-    Permissions = tabledata "Item Ledger Entry" = rimd;
+    Permissions = tabledata "Item Ledger Entry" = rimd, tabledata "Reservation Entry" = rimd;
 
     var
         Tempexcelbuffer: record "Excel Buffer" temporary;
@@ -106,5 +106,42 @@ codeunit 60200 FBM_Fixes_JMCO
         until cust.Next() = 0;
         message('done');
 
+    end;
+
+    procedure updateped(entryno: Integer; ped12: text[3]; ped1: text[2]; ped2: text[2]; ped3: text[4]; ped4: text[7])
+    var
+        ile: record "Item Ledger Entry";
+        ile2: record "Item Ledger Entry";
+        resentry: record "Reservation Entry";
+        ped: text[16];
+    begin
+        ped := ped12 + ' ' + ped3 + '-' + ped4;
+
+        if ile.get(entryno) then begin
+            ile.FBM_Pedimento12 := ped12;
+            ile.FBM_Pedimento1 := ped1;
+            ile.FBM_Pedimento2 := ped2;
+            ile.FBM_Pedimento3 := ped3;
+            ile.FBM_Pedimento4 := ped4;
+            ile.FBM_Pedimento := ped;
+            ile.Modify();
+            ile2.SetRange("Item No.", ile."Item No.");
+            ile2.SetRange("Serial No.", ile."Serial No.");
+            ile2.ModifyAll(FBM_Pedimento, ile.FBM_Pedimento);
+            ile2.ModifyAll(FBM_Pedimento12, ile.FBM_Pedimento12);
+            ile2.ModifyAll(FBM_Pedimento1, ile.FBM_Pedimento1);
+            ile2.ModifyAll(FBM_Pedimento2, ile.FBM_Pedimento2);
+            ile2.ModifyAll(FBM_Pedimento3, ile.FBM_Pedimento3);
+            ile2.ModifyAll(FBM_Pedimento4, ile.FBM_Pedimento4);
+            resentry.SetRange("Item No.", ile."Item No.");
+            resentry.SetRange("Serial No.", ile."Serial No.");
+            resentry.ModifyAll(FBM_Pedimento, ile.FBM_Pedimento);
+            resentry.ModifyAll(FBM_Pedimento12, ile.FBM_Pedimento12);
+            resentry.ModifyAll(FBM_Pedimento1, ile.FBM_Pedimento1);
+            resentry.ModifyAll(FBM_Pedimento2, ile.FBM_Pedimento2);
+            resentry.ModifyAll(FBM_Pedimento3, ile.FBM_Pedimento3);
+            resentry.ModifyAll(FBM_Pedimento4, ile.FBM_Pedimento4);
+
+        end;
     end;
 }

@@ -1,4 +1,4 @@
-pageextension 60203 FBM_GLSetupExt_JMCO extends "General Ledger Setup"
+pageextension 60303 FBM_GLSetupExt_JMCO extends "General Ledger Setup"
 {
     actions
     {
@@ -56,6 +56,20 @@ pageextension 60203 FBM_GLSetupExt_JMCO extends "General Ledger Setup"
                     fix: Codeunit FBM_Fixes_JMCO;
                 begin
                     fix.refrcust();
+
+
+                end;
+
+            }
+            action("ws")
+            {
+                ApplicationArea = all;
+                trigger
+                OnAction()
+                var
+                    fix: Codeunit FBM_WS;
+                begin
+                    fix.Run();
 
 
                 end;

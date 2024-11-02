@@ -57,6 +57,11 @@ page 60290 FBM_PermOpAsm_JYM_CO
         }
     }
     trigger
+    OnOpenPage()
+    begin
+        rec.SetRange(ActiveRec,true);
+    end;
+    trigger
 
     OnAfterGetRecord()
     begin

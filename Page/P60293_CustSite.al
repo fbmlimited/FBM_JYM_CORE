@@ -1,14 +1,11 @@
-page 60201 FBM_CustomerSite_JMCO
+page 60293 FBM_CustSite_JMCO
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    SourceTable = FBM_CustomerSite_Ctmp;
+    SourceTable = FBM_CustomerSite_C;
     caption = 'Customer/Site';
-    SourceTableTemporary = true;
-    ModifyAllowed = false;
-    InsertAllowed = false;
-    DeleteAllowed = false;
+    SourceTableTemporary = false;
 
 
     layout
@@ -18,74 +15,74 @@ page 60201 FBM_CustomerSite_JMCO
             group(Selection)
             {
 
-                // field(selsite; selsite)
-                // {
-                //     caption = 'Select New Site';
-                //     ApplicationArea = all;
-                //     trigger
-                //     OnLookup(var Text: Text): Boolean
-                //     var
-                //         compinfo: record "Company Information";
-                //         csite: record FBM_CustomerSite_C;
-                //         maxnum: Integer;
-                //     begin
-                //         clear(site);
-                //         compinfo.get;
-                //         site.SetRange(Company1, compinfo."Custom System Indicator Text");
-                //         if site.findfirst then
-                //             repeat
-                //                 csite.setrange(sitegrcode, site."Site Code");
-                //                 if csite.IsEmpty then
-                //                     site.Mark(true)
-                //                 else
-                //                     site.mark(false);
-                //             until site.Next() = 0;
+                field(selsite; selsite)
+                {
+                    caption = 'Select New Site';
+                    ApplicationArea = all;
+                    trigger
+                    OnLookup(var Text: Text): Boolean
+                    var
+                        compinfo: record "Company Information";
+                        csite: record FBM_CustomerSite_C;
+                        maxnum: Integer;
+                    begin
+                        clear(site);
+                        compinfo.get;
+                        site.SetRange(Company1, compinfo."Custom System Indicator Text");
+                        if site.findfirst then
+                            repeat
+                                csite.setrange(sitegrcode, site."Site Code");
+                                if csite.IsEmpty then
+                                    site.Mark(true)
+                                else
+                                    site.mark(false);
+                            until site.Next() = 0;
 
-                //         site.setrange(Company1);
-                //         site.SetRange(Company2, compinfo."Custom System Indicator Text");
-                //         if site.findfirst then
-                //             repeat
-                //                 csite.setrange(sitegrcode, site."Site Code");
-                //                 if csite.IsEmpty then
-                //                     site.Mark(true)
-                //                 else
-                //                     site.mark(false);
-                //             until site.Next() = 0;
-                //         site.SetRange(Company2);
-                //         site.SetRange(Company3, compinfo."Custom System Indicator Text");
-                //         if site.findfirst then
-                //             repeat
-                //                 csite.setrange(sitegrcode, site."Site Code");
-                //                 if csite.IsEmpty then
-                //                     site.Mark(true)
-                //                 else
-                //                     site.mark(false);
-                //             until site.Next() = 0;
-                //         site.setrange(Company1);
-                //         site.SetRange(Company2);
-                //         site.SetRange(Company3);
-                //         site.MarkedOnly(true);
+                        site.setrange(Company1);
+                        site.SetRange(Company2, compinfo."Custom System Indicator Text");
+                        if site.findfirst then
+                            repeat
+                                csite.setrange(sitegrcode, site."Site Code");
+                                if csite.IsEmpty then
+                                    site.Mark(true)
+                                else
+                                    site.mark(false);
+                            until site.Next() = 0;
+                        site.SetRange(Company2);
+                        site.SetRange(Company3, compinfo."Custom System Indicator Text");
+                        if site.findfirst then
+                            repeat
+                                csite.setrange(sitegrcode, site."Site Code");
+                                if csite.IsEmpty then
+                                    site.Mark(true)
+                                else
+                                    site.mark(false);
+                            until site.Next() = 0;
+                        site.setrange(Company1);
+                        site.SetRange(Company2);
+                        site.SetRange(Company3);
+                        site.MarkedOnly(true);
 
-                //         if page.RunModal(page::FBM_SiteLookup_JMCO, site) = action::LookupOK then begin
-                //             selsite := site."Site Code";
-                //             if rec.SiteGrCode = '' then begin
-                //                 rec.SiteGrCode := site."Site Code";
-                //                 csite.Reset();
-                //                 csite.setrange("Customer No.", rec."Customer No.");
-                //                 if csite.FindLast() then
-                //                     if strpos(csite."Site Code", '-') > 0 then
-                //                         evaluate(maxnum, copystr(csite."Site Code", strpos(csite."Site Code", '-') + 1))
-                //                     else
-                //                         maxnum := 0
-                //                 else
-                //                     maxnum := 0;
-                //                 //rec.Rename(rec."Customer No.", rec."Customer No." + '-' + PADSTR('', 4 - strlen(FORMAT(MAXNUM + 1)), '0') + FORMAT(MAXNUM + 1));
-                //                 rec."Site Code" := rec."Customer No." + '-' + PADSTR('', 4 - strlen(FORMAT(MAXNUM + 1)), '0') + FORMAT(MAXNUM + 1);
+                        if page.RunModal(page::FBM_SiteLookup_JMCO, site) = action::LookupOK then begin
+                            selsite := site."Site Code";
+                            if rec.SiteGrCode = '' then begin
+                                rec.SiteGrCode := site."Site Code";
+                                csite.Reset();
+                                csite.setrange("Customer No.", rec."Customer No.");
+                                if csite.FindLast() then
+                                    if strpos(csite."Site Code", '-') > 0 then
+                                        evaluate(maxnum, copystr(csite."Site Code", strpos(csite."Site Code", '-') + 1))
+                                    else
+                                        maxnum := 0
+                                else
+                                    maxnum := 0;
+                                //rec.Rename(rec."Customer No.", rec."Customer No." + '-' + PADSTR('', 4 - strlen(FORMAT(MAXNUM + 1)), '0') + FORMAT(MAXNUM + 1));
+                                rec."Site Code" := rec."Customer No." + '-' + PADSTR('', 4 - strlen(FORMAT(MAXNUM + 1)), '0') + FORMAT(MAXNUM + 1);
 
-                //             end;
-                //         end;
-                //     end;
-                // }
+                            end;
+                        end;
+                    end;
+                }
             }
             repeater(GroupName)
             {
@@ -98,6 +95,16 @@ page 60201 FBM_CustomerSite_JMCO
                 {
                     ApplicationArea = All;
                     Caption = 'Site Code';
+                }
+                field(Version; Rec.Version)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Version';
+                }
+                field(ActiveRec; Rec.ActiveRec)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Active';
                 }
 
                 field(Status; Rec.Status)
@@ -237,22 +244,7 @@ page 60201 FBM_CustomerSite_JMCO
 
         }
     }
-    trigger
-    OnOpenPage()
-    var
-        csite: record FBM_CustomerSite_C;
-    begin
-        issuper := uper.IsSuper(UserSecurityId());
-        //rec.SetRange(ActiveRec, true);
-        csite.setrange(ActiveRec, true);
-        csite.findfirst;
-        repeat
-            rec.TransferFields(csite, true);
-            rec.Insert();
-        until csite.Next() = 0;
-        rec.SetRange("Customer No.", pcust);
 
-    end;
 
     trigger
     OnInsertRecord(BelowxRec: Boolean): Boolean
