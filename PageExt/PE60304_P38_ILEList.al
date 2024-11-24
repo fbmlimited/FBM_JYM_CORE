@@ -4,10 +4,17 @@ pageextension 60304 FBM_ILEListext_JMCO extends "Item Ledger Entries"
     {
         addlast(Control1)
         {
-            field(FBM_Pedimento; Rec.FBM_Pedimento)
+            field(FBM_Pedimento; copystr(Rec.FBM_Pedimento_2, 5))
             {
                 ApplicationArea = all;
 
+                caption = 'Pedimento[15]';
+            }
+            field(FBM_Pedimento14; rec.FBM_Pedimento12 + ' ' + copystr(Rec.FBM_Pedimento_2, 11))
+            {
+                ApplicationArea = all;
+
+                caption = 'Pedimento[14]';
             }
 
         }

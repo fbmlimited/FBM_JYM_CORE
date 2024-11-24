@@ -373,7 +373,9 @@ codeunit 60201 FBM_WS
                     siteloc.ChangeCompany('Juegos y Maquinaria');
                     siteloc.Reset();
                     siteloc.SetRange(ActiveRec, true);
+                    siteloc.SetFilter(Status, '<>%1', siteloc.Status::"STOP OPERATION");
                     siteloc.SetRange(SiteGrCode, No);
+                    customer.ChangeCompany('Juegos y Maquinaria');
                     customer.SetRange(FBM_GrCode, gcust);
                     if customer.FindFirst() then
                         siteloc.setrange("Customer No.", customer."No.");
@@ -490,132 +492,136 @@ codeunit 60201 FBM_WS
         cust: Text;
         jsonarray: JsonArray;
         jsontext: text;
+        cname: text;
 
 
     begin
-        AuthString := STRSUBSTNO('%1:%2', 'API.ACE', 'DBCAno845.95');
+        cname := CompanyName;
+        if cname = 'FBM MEX' THEN BEGIN
+            AuthString := STRSUBSTNO('%1:%2', 'API.ACE', 'DBCAno845.95');
 
-        AuthString := B64.ToBase64(AuthString);
-        AuthString := STRSUBSTNO('Basic %1', AuthString);
-        Client.DefaultRequestHeaders().Add('Authorization', AuthString);
-        Url := 'https://dynamics-bc.com:2214/BC220/ODataV4/GetFAMXWS/';
-        if not client.Get(Url, responseMessage) then
-            Error('The call to the web service failed.');
-        if not ResponseMessage.IsSuccessStatusCode then
-            Error('The web service returned an error message:\\' +
-                    'Status code: %1\' +
-                    'Description: %2',
-                    ResponseMessage.HttpStatusCode,
-                    ResponseMessage.ReasonPhrase);
-        ResponseMessage.Content.ReadAs(JsonText);
+            AuthString := B64.ToBase64(AuthString);
+            AuthString := STRSUBSTNO('Basic %1', AuthString);
+            Client.DefaultRequestHeaders().Add('Authorization', AuthString);
+            Url := 'https://dynamics-bc.com:2214/BC220/ODataV4/GetFAMXWS/';
+            if not client.Get(Url, responseMessage) then
+                Error('The call to the web service failed.');
+            if not ResponseMessage.IsSuccessStatusCode then
+                Error('The web service returned an error message:\\' +
+                        'Status code: %1\' +
+                        'Description: %2',
+                        ResponseMessage.HttpStatusCode,
+                        ResponseMessage.ReasonPhrase);
+            ResponseMessage.Content.ReadAs(JsonText);
 
-        JSONManagement.InitializeObject(JsonText);
+            JSONManagement.InitializeObject(JsonText);
 
-        if JSONManagement.GetArrayPropertyValueAsStringByName('value', CustomerJsonObject) then begin
+            if JSONManagement.GetArrayPropertyValueAsStringByName('value', CustomerJsonObject) then begin
 
-            ArrayJSONManagement.InitializeCollection(CustomerJsonObject);
+                ArrayJSONManagement.InitializeCollection(CustomerJsonObject);
 
-            for i := 0 to ArrayJSONManagement.GetCollectionCount() - 1 do begin
-                ArrayJSONManagement.GetObjectFromCollectionByIndex(singlecust, i);
-                ObjectJSONManagement.InitializeObject(singlecust);
+                for i := 0 to ArrayJSONManagement.GetCollectionCount() - 1 do begin
+                    ArrayJSONManagement.GetObjectFromCollectionByIndex(singlecust, i);
+                    ObjectJSONManagement.InitializeObject(singlecust);
 
-                ObjectJSONManagement.GetStringPropertyValueByName('No', CodeText);
-                No := CopyStr(CodeText, 1, MaxStrLen(fa."No."));
-                if no <> '' then begin
-                    fa.Reset();
+                    ObjectJSONManagement.GetStringPropertyValueByName('No', CodeText);
+                    No := CopyStr(CodeText, 1, MaxStrLen(fa."No."));
+                    if no <> '' then begin
+                        fa.Reset();
 
-                    fa.SetRange("No.", No);
-                    if fa.FindFirst() then begin
-                        fa.LastPropagated := Today;
-                        fa.Modify();
-                        ObjectJSONManagement.GetStringPropertyValueByName('Version', CodeText);
-                        if evaluate(version, CopyStr(CodeText, 1, MaxStrLen(format(fa.Version)))) then
-                            if version > fa.Version then begin
-                                fa.version := version;
+                        fa.SetRange("No.", No);
+                        if fa.FindFirst() then begin
+                            fa.LastPropagated := Today;
+                            fa.Modify();
+                            ObjectJSONManagement.GetStringPropertyValueByName('Version', CodeText);
+                            if evaluate(version, CopyStr(CodeText, 1, MaxStrLen(format(fa.Version)))) then
+                                if version > fa.Version then begin
+                                    fa.version := version;
 
-                                ObjectJSONManagement.GetStringPropertyValueByName('SerialNo', CodeText);
-                                fa."Serial No." := CopyStr(CodeText, 1, MaxStrLen(fa."Serial No."));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Description', CodeText);
-                                fa.Description := CopyStr(CodeText, 1, MaxStrLen(fa.Description));
-                                ObjectJSONManagement.GetStringPropertyValueByName('FAClassCode', CodeText);
-                                fa."FA Class Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Class Code"));
-                                ObjectJSONManagement.GetStringPropertyValueByName('FASubclassCode', CodeText);
-                                fa."FA Subclass Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Subclass Code"));
-                                ObjectJSONManagement.GetStringPropertyValueByName('FALocationcode', CodeText);
-                                fa."FA Location Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Location Code"));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Model', CodeText);
-                                fa.FBM_Model := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Model));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Segment', CodeText);
-                                evaluate(fa.FBM_Segment2, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Segment2.AsInteger()))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Brand', CodeText);
-                                evaluate(fa.FBM_Brand, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Brand))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Lessee', CodeText);
-                                fa.FBM_Lessee := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Lessee));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Site', CodeText);
-                                fa.FBM_Site := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Site));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Status', CodeText);
-                                evaluate(fa.FBM_Status, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Status.AsInteger()))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('DAtePrepared', CodeText);
-                                evaluate(fa.FBM_DatePrepared, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DatePrepared))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Acqcost', CodeText);
-                                evaluate(fa.FBM_AcquisitionCost, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionCost))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Acqdate', CodeText);
-                                evaluate(fa.FBM_AcquisitionDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionDate))));
-                                ObjectJSONManagement.GetStringPropertyValueByName('Deprdate', CodeText);
-                                evaluate(fa.FBM_DepreciationDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DepreciationDate))));
-                                fa.Modify(true);
-                            end;
-                    end
-                    else begin
-                        fa.Init();
-                        fa."No." := No;
-                        fa.ActiveRec := true;
-                        fa.Version := version;
-                        fa.Insert();
-                        fa.LastPropagated := Today;
-                        ObjectJSONManagement.GetStringPropertyValueByName('SerialNo', CodeText);
-                        fa."Serial No." := CopyStr(CodeText, 1, MaxStrLen(fa."Serial No."));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Description', CodeText);
-                        fa.Description := CopyStr(CodeText, 1, MaxStrLen(fa.Description));
-                        ObjectJSONManagement.GetStringPropertyValueByName('FAClassCode', CodeText);
-                        fa."FA Class Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Class Code"));
-                        ObjectJSONManagement.GetStringPropertyValueByName('FASubclassCode', CodeText);
-                        fa."FA Subclass Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Subclass Code"));
-                        ObjectJSONManagement.GetStringPropertyValueByName('FALocationcode', CodeText);
-                        fa."FA Location Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Location Code"));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Model', CodeText);
-                        fa.FBM_Model := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Model));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Segment', CodeText);
-                        evaluate(fa.FBM_Segment2, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Segment2.AsInteger()))));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Brand', CodeText);
-                        evaluate(fa.FBM_Brand, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Brand))));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Lessee', CodeText);
-                        fa.FBM_Lessee := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Lessee));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Site', CodeText);
-                        fa.FBM_Site := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Site));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Status', CodeText);
-                        evaluate(fa.FBM_Status, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Status.AsInteger()))));
-                        ObjectJSONManagement.GetStringPropertyValueByName('DAtePrepared', CodeText);
-                        evaluate(fa.FBM_DatePrepared, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DatePrepared))));
-                        ObjectJSONManagement.GetStringPropertyValueByName('AcqCost', CodeText);
-                        evaluate(fa.FBM_AcquisitionCost, CopyStr(CodeText, 1, 20));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Acqdate', CodeText);
-                        evaluate(fa.FBM_AcquisitionDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionDate))));
-                        ObjectJSONManagement.GetStringPropertyValueByName('Deprdate', CodeText);
-                        evaluate(fa.FBM_DepreciationDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DepreciationDate))));
-                        fa.Modify();
+                                    ObjectJSONManagement.GetStringPropertyValueByName('SerialNo', CodeText);
+                                    fa."Serial No." := CopyStr(CodeText, 1, MaxStrLen(fa."Serial No."));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Description', CodeText);
+                                    fa.Description := CopyStr(CodeText, 1, MaxStrLen(fa.Description));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('FAClassCode', CodeText);
+                                    fa."FA Class Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Class Code"));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('FASubclassCode', CodeText);
+                                    fa."FA Subclass Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Subclass Code"));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('FALocationcode', CodeText);
+                                    fa."FA Location Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Location Code"));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Model', CodeText);
+                                    fa.FBM_Model := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Model));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Segment', CodeText);
+                                    evaluate(fa.FBM_Segment2, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Segment2.AsInteger()))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Brand', CodeText);
+                                    evaluate(fa.FBM_Brand, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Brand))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Lessee', CodeText);
+                                    fa.FBM_Lessee := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Lessee));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Site', CodeText);
+                                    fa.FBM_Site := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Site));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Status', CodeText);
+                                    evaluate(fa.FBM_Status, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Status.AsInteger()))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('DAtePrepared', CodeText);
+                                    evaluate(fa.FBM_DatePrepared, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DatePrepared))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('AcqCost', CodeText);
+                                    evaluate(fa.FBM_AcquisitionCost, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionCost))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Acqdate', CodeText);
+                                    evaluate(fa.FBM_AcquisitionDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionDate))));
+                                    ObjectJSONManagement.GetStringPropertyValueByName('Deprdate', CodeText);
+                                    evaluate(fa.FBM_DepreciationDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DepreciationDate))));
+                                    fa.Modify(true);
+                                end;
+                        end
+                        else begin
+                            fa.Init();
+                            fa."No." := No;
+                            fa.ActiveRec := true;
+                            fa.Version := version;
+                            fa.Insert();
+                            fa.LastPropagated := Today;
+                            ObjectJSONManagement.GetStringPropertyValueByName('SerialNo', CodeText);
+                            fa."Serial No." := CopyStr(CodeText, 1, MaxStrLen(fa."Serial No."));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Description', CodeText);
+                            fa.Description := CopyStr(CodeText, 1, MaxStrLen(fa.Description));
+                            ObjectJSONManagement.GetStringPropertyValueByName('FAClassCode', CodeText);
+                            fa."FA Class Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Class Code"));
+                            ObjectJSONManagement.GetStringPropertyValueByName('FASubclassCode', CodeText);
+                            fa."FA Subclass Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Subclass Code"));
+                            ObjectJSONManagement.GetStringPropertyValueByName('FALocationcode', CodeText);
+                            fa."FA Location Code" := CopyStr(CodeText, 1, MaxStrLen(fa."FA Location Code"));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Model', CodeText);
+                            fa.FBM_Model := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Model));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Segment', CodeText);
+                            evaluate(fa.FBM_Segment2, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Segment2.AsInteger()))));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Brand', CodeText);
+                            evaluate(fa.FBM_Brand, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Brand))));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Lessee', CodeText);
+                            fa.FBM_Lessee := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Lessee));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Site', CodeText);
+                            fa.FBM_Site := CopyStr(CodeText, 1, MaxStrLen(fa.FBM_Site));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Status', CodeText);
+                            evaluate(fa.FBM_Status, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_Status.AsInteger()))));
+                            ObjectJSONManagement.GetStringPropertyValueByName('DAtePrepared', CodeText);
+                            evaluate(fa.FBM_DatePrepared, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DatePrepared))));
+                            ObjectJSONManagement.GetStringPropertyValueByName('AcqCost', CodeText);
+                            evaluate(fa.FBM_AcquisitionCost, CopyStr(CodeText, 1, 20));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Acqdate', CodeText);
+                            evaluate(fa.FBM_AcquisitionDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_AcquisitionDate))));
+                            ObjectJSONManagement.GetStringPropertyValueByName('Deprdate', CodeText);
+                            evaluate(fa.FBM_DepreciationDate, CopyStr(CodeText, 1, MaxStrLen(format(fa.FBM_DepreciationDate))));
+                            fa.Modify();
+                        end;
                     end;
+
                 end;
+                fa.Reset();
+                fa.SetFilter(LastPropagated, '=%1', 0D);
+                fa.SetFilter(FBM_ReplicaStatus2, '<>%1', fa.FBM_ReplicaStatus2::Pending);
 
+                fa.DeleteAll();
+                fa.reset;
+                fa.ModifyAll(LastPropagated, 0D);
             end;
-            fa.Reset();
-            fa.SetFilter(LastPropagated, '=%1', 0D);
-            fa.SetFilter(FBM_ReplicaStatus2, '<>%1', fa.FBM_ReplicaStatus2::Pending);
-
-            fa.DeleteAll();
-            fa.reset;
-            fa.ModifyAll(LastPropagated, 0D);
-        end;
+        END;
     end;
 
     local procedure postFANew()

@@ -84,7 +84,7 @@ codeunit 60200 FBM_Fixes_JMCO
         evaluate(eno, GetValueAtCell(rowNo, 1));
         ile.SetRange("Entry No.", eno);
         if ile.FindFirst() then begin
-            ile.validate(FBM_Pedimento, GetValueAtCell(rowNo, 2));
+            ile.validate(FBM_Pedimento_2, GetValueAtCell(rowNo, 2));
             ile.validate(FBM_Pedimentobis, GetValueAtCell(rowNo, 3));
             ile.Modify();
         end;
@@ -108,39 +108,42 @@ codeunit 60200 FBM_Fixes_JMCO
 
     end;
 
-    procedure updateped(entryno: Integer; ped12: text[3]; ped1: text[2]; ped2: text[2]; ped3: text[4]; ped4: text[7])
+    procedure updateped(entryno: Integer; ped12: text[3]; ped1: text[2]; ped2: text[2]; ped3: text[4]; ped34: text[1]; ped4: text[6])
     var
         ile: record "Item Ledger Entry";
         ile2: record "Item Ledger Entry";
         resentry: record "Reservation Entry";
-        ped: text[16];
+        ped: text[22];
     begin
-        ped := ped12 + ' ' + ped3 + '-' + ped4;
+        ped := ped12 + ' ' + ped1 + ' ' + ped2 + ' ' + ped3 + '-' + ped34 + ped4;
 
         if ile.get(entryno) then begin
             ile.FBM_Pedimento12 := ped12;
             ile.FBM_Pedimento1 := ped1;
             ile.FBM_Pedimento2 := ped2;
             ile.FBM_Pedimento3 := ped3;
-            ile.FBM_Pedimento4 := ped4;
-            ile.FBM_Pedimento := ped;
+            ile.FBM_Pedimento34 := ped34;
+            ile.FBM_Pedimento42 := ped4;
+            ile.FBM_Pedimento_2 := ped;
             ile.Modify();
             ile2.SetRange("Item No.", ile."Item No.");
             ile2.SetRange("Serial No.", ile."Serial No.");
-            ile2.ModifyAll(FBM_Pedimento, ile.FBM_Pedimento);
+            ile2.ModifyAll(FBM_Pedimento_2, ile.FBM_Pedimento_2);
             ile2.ModifyAll(FBM_Pedimento12, ile.FBM_Pedimento12);
             ile2.ModifyAll(FBM_Pedimento1, ile.FBM_Pedimento1);
             ile2.ModifyAll(FBM_Pedimento2, ile.FBM_Pedimento2);
             ile2.ModifyAll(FBM_Pedimento3, ile.FBM_Pedimento3);
-            ile2.ModifyAll(FBM_Pedimento4, ile.FBM_Pedimento4);
+            ile2.ModifyAll(FBM_Pedimento34, ile.FBM_Pedimento34);
+            ile2.ModifyAll(FBM_Pedimento42, ile.FBM_Pedimento42);
             resentry.SetRange("Item No.", ile."Item No.");
             resentry.SetRange("Serial No.", ile."Serial No.");
-            resentry.ModifyAll(FBM_Pedimento, ile.FBM_Pedimento);
+            resentry.ModifyAll(FBM_Pedimento_2, ile.FBM_Pedimento_2);
             resentry.ModifyAll(FBM_Pedimento12, ile.FBM_Pedimento12);
             resentry.ModifyAll(FBM_Pedimento1, ile.FBM_Pedimento1);
             resentry.ModifyAll(FBM_Pedimento2, ile.FBM_Pedimento2);
             resentry.ModifyAll(FBM_Pedimento3, ile.FBM_Pedimento3);
-            resentry.ModifyAll(FBM_Pedimento4, ile.FBM_Pedimento4);
+            resentry.ModifyAll(FBM_Pedimento34, ile.FBM_Pedimento34);
+            resentry.ModifyAll(FBM_Pedimento42, ile.FBM_Pedimento42);
 
         end;
     end;
