@@ -103,6 +103,11 @@ page 60292 FBM_PedimentoPopup_JMCO
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field(FBM_Pedimento_2; Rec.FBM_Pedimento_2)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
             }
         }
     }
@@ -110,13 +115,22 @@ page 60292 FBM_PedimentoPopup_JMCO
     trigger
     OnAfterGetRecord()
     begin
-        ped12 := copystr(rec.FBM_Pedimento_2, 1, 3);
-        ped1 := copystr(rec.FBM_Pedimento_2, 5, 2);
-        ped2 := copystr(rec.FBM_Pedimento_2, 8, 2);
-        ped3 := copystr(rec.FBM_Pedimento_2, 11, 4);
-        ped34 := copystr(rec.FBM_Pedimento_2, 16, 1);
-        ped4 := copystr(rec.FBM_Pedimento_2, 17, 6);
-
+        if StrLen(rec.FBM_Pedimento_2) > 16 then begin
+            ped12 := copystr(rec.FBM_Pedimento_2, 1, 3);
+            ped1 := copystr(rec.FBM_Pedimento_2, 5, 2);
+            ped2 := copystr(rec.FBM_Pedimento_2, 8, 2);
+            ped3 := copystr(rec.FBM_Pedimento_2, 11, 4);
+            ped34 := copystr(rec.FBM_Pedimento_2, 16, 1);
+            ped4 := copystr(rec.FBM_Pedimento_2, 17, 6);
+        end
+        else begin
+            ped12 := copystr(rec.FBM_Pedimento_2, 1, 3);
+            ped1 := '';
+            ped2 := '';
+            ped3 := copystr(rec.FBM_Pedimento_2, 5, 4);
+            ped34 := copystr(rec.FBM_Pedimento_2, 10, 1);
+            ped4 := copystr(rec.FBM_Pedimento_2, 11, 6);
+        end;
 
 
 

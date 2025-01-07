@@ -2,7 +2,7 @@
   "id": "3c5c97e5-3674-41f4-b04f-fc563d2a7fd4",
   "name": "FBM_JYM_CORE",
   "publisher": "FBM Group",
-  "version": "124.5.156.210",
+  "version": "125.0.156.101",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -15,18 +15,12 @@
       "id": "9d836a4f-3b97-4179-ae7d-608f099ba7f3",
       "name": "FBM Data Dictionary",
       "publisher": "FBM Group",
-      "version": "124.5.156.11"
-    },
-    {
-      "id": "eeab5194-c9bc-4efc-bc6c-bf12792d6a5f",
-      "name": "STF_SECIF_JyM",
-      "publisher": "Grupo STAFF",
-      "version": "2.0.4.6"
+      "version": "125.0.156.100"
     }
   ],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "24.4.0.0",
+  "application": "25.0.0.0",
   "idRanges": [
     {
       "from": 60100,
@@ -39,7 +33,7 @@
     "allowDownloadingSource": false,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "13.0",
+  "runtime": "14.0",
   "features": [
     "NoImplicitWith"
   ]
